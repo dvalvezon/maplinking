@@ -44,8 +44,8 @@ final class RouteServiceImpl implements RouteService {
             RouteInformation routeInformation = new RouteInformation(
                     route.getDuration(),
                     route.getDistance(),
-                    fuelCost,
-                    fuelCost.add(route.getTotalTollFeeAmount()));
+                    fuelCost.setScale(2, BigDecimal.ROUND_HALF_UP),
+                    fuelCost.add(route.getTotalTollFeeAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
 
             LOGGER.info("getRouteInformation call completed. routeInformation={}", routeInformation);
 

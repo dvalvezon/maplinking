@@ -8,6 +8,8 @@ import com.maplinking.service.RouteService;
 import com.maplinking.service.ServiceException;
 import com.maplinking.service.entity.LocationInfo;
 import com.maplinking.service.entity.RouteInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 public class Routes {
 
-    // TODO - LOGS
+    private static final Logger LOGGER = LoggerFactory.getLogger(Routes.class);
 
     private final RouteService routeService;
     private final ObjectMapper objectMapper;
@@ -37,17 +39,25 @@ public class Routes {
     public RouteJson routeByPost(@Valid @RequestBody List<AddressJson> addresses,
                                  @RequestParam(defaultValue = "0.25") BigDecimal costPerKm)
             throws ServiceException, ValidationException {
+        LOGGER.info("Received POST /routes addresses={} costPerKm={}", addresses, costPerKm);
         validator.validate(addresses);
 
         RouteInformation routeInformation = routeService.getRouteInformation(toLocationInfo(addresses), costPerKm);
 
-        return new RouteJson(routeInformation);
+        RouteJson response = new RouteJson(routeInformation);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Completed POST /routes response={}", response);
+        }
+
+        return response;
     }
 
     @GetMapping(path = "/routes/{addresses}", produces = "application/json")
     public RouteJson routeByGet(@PathVariable("addresses") String addressesJson,
                                 @RequestParam(defaultValue = "0.25") BigDecimal costPerKm)
             throws ServiceException, ValidationException {
+        LOGGER.info("Received GET /routes addressesJson={} costPerKm={}", addressesJson, costPerKm);
         try {
             List<AddressJson> addresses = objectMapper.readValue(addressesJson,
                     new TypeReference<List<AddressJson>>() {
@@ -57,7 +67,13 @@ public class Routes {
 
             RouteInformation routeInformation = routeService.getRouteInformation(toLocationInfo(addresses), costPerKm);
 
-            return new RouteJson(routeInformation);
+            RouteJson response = new RouteJson(routeInformation);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Completed GET /routes response={}", response);
+            }
+
+            return response;
         } catch (IOException e) {
             throw new ValidationException("Invalid addresses Json format.", e);
         }
