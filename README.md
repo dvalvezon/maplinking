@@ -18,12 +18,12 @@ It is also possible to start the application with `mvn spring-boot:run` within t
 
 Submit a request using the default costPerKm (0.25c)
 ```sh
-$ curl -H "Content-Type: application/json" -X GET -g http://localhost:8080/routes/[%7B%22address%22:%22Avenida%20Engenheiro%20Heitor%20Antonio%20Eiras%20Garcia%22,%22number%22:%222214%22,%22city%22:%22Sao%20Paulo%22,%22state%22:%22Sao%20Paulo%22%7D,%7B%22address%22:%22Avenida%20das%20Na%C3%A7%C3%B5es%20Unidas%22,%22number%22:%22100%22,%22city%22:%22S%C3%A3o%20Vicente%22,%22state%22:%22Sao%20Paulo%22%7D]
+$ curl -X GET -g http://localhost:8080/routes/[%7B%22address%22:%22Avenida%20Engenheiro%20Heitor%20Antonio%20Eiras%20Garcia%22,%22number%22:%222214%22,%22city%22:%22Sao%20Paulo%22,%22state%22:%22Sao%20Paulo%22%7D,%7B%22address%22:%22Avenida%20das%20Na%C3%A7%C3%B5es%20Unidas%22,%22number%22:%22100%22,%22city%22:%22S%C3%A3o%20Vicente%22,%22state%22:%22Sao%20Paulo%22%7D]
 ```
 
 Submit a request using a custom costPerKm (0.40c)
 ```sh
-$ curl -H "Content-Type: application/json" -X GET -g http://localhost:8080/routes/[%7B%22address%22:%22Avenida%20Engenheiro%20Heitor%20Antonio%20Eiras%20Garcia%22,%22number%22:%222214%22,%22city%22:%22Sao%20Paulo%22,%22state%22:%22Sao%20Paulo%22%7D,%7B%22address%22:%22Avenida%20das%20Na%C3%A7%C3%B5es%20Unidas%22,%22number%22:%22100%22,%22city%22:%22S%C3%A3o%20Vicente%22,%22state%22:%22Sao%20Paulo%22%7D]?costPerKm=0.40
+$ curl -X GET -g http://localhost:8080/routes/[%7B%22address%22:%22Avenida%20Engenheiro%20Heitor%20Antonio%20Eiras%20Garcia%22,%22number%22:%222214%22,%22city%22:%22Sao%20Paulo%22,%22state%22:%22Sao%20Paulo%22%7D,%7B%22address%22:%22Avenida%20das%20Na%C3%A7%C3%B5es%20Unidas%22,%22number%22:%22100%22,%22city%22:%22S%C3%A3o%20Vicente%22,%22state%22:%22Sao%20Paulo%22%7D]?costPerKm=0.40
 ```
 
 Or... Use your Browser Address Bar:
