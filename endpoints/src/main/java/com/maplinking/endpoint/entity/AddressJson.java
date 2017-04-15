@@ -11,6 +11,17 @@ public final class AddressJson implements Validable {
     private String city;
     private String state;
 
+    public AddressJson() {
+
+    }
+
+    public AddressJson(String address, String number, String city, String state) {
+        this.address = address;
+        this.number = number;
+        this.city = city;
+        this.state = state;
+    }
+
     public String getAddress() {
         return address;
     }

@@ -3,7 +3,7 @@ package com.maplinking.endpoint;
 
 import java.util.Collection;
 
-public final class Validator {
+public class Validator {
 
     private static final Validator INSTANCE = new Validator();
 
