@@ -1,8 +1,8 @@
 package com.maplinking.service;
 
-import com.maplinking.maplink.Location;
 import com.maplinking.maplink.MapLinkApi;
-import com.maplinking.maplink.Route;
+import com.maplinking.maplink.entity.Position;
+import com.maplinking.maplink.entity.RouteSummary;
 import com.maplinking.service.entity.LocationInfo;
 import com.maplinking.service.entity.RouteInformation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +18,26 @@ final class RouteServiceImpl implements RouteService {
     private final MapLinkApi api;
 
     @Autowired
-    public RouteServiceImpl(MapLinkApi api) {
+    RouteServiceImpl(MapLinkApi api) {
         this.api = api;
     }
 
     public RouteInformation getRouteInformation(List<LocationInfo> locationInfoList, BigDecimal costPerKm) {
-        List<Location> locations = new ArrayList<>();
+        List<Position> positions = new ArrayList<>();
 
         System.out.println(locationInfoList); // TODO
 
-        locationInfoList.forEach(locInfo -> locations.add(api.findAddress(locInfo.getAddress(), locInfo.getNumber(),
-                locInfo.getCity(), locInfo.getState()).getLocation()));
+        locationInfoList.forEach(locInfo -> positions.add(api.findPosition(locInfo.getAddress(), locInfo.getNumber(),
+                locInfo.getCity(), locInfo.getState())));
 
-        Route route = api.getRoute(locations);
+        RouteSummary route = api.getRouteSummary(positions);
 
-        BigDecimal fuelCost = costPerKm.multiply(BigDecimal.valueOf(route.getSummary().getDistance() / 1000));
+        BigDecimal fuelCost = costPerKm.multiply(BigDecimal.valueOf(route.getDistance() / 1000));
 
         return new RouteInformation(
-                route.getSummary().getDuration(),
-                route.getSummary().getDistance(),
+                route.getDuration(),
+                route.getDistance(),
                 fuelCost,
-                fuelCost.add(route.getSummary().getTotalTollFees()));
+                fuelCost.add(route.getTotalTollFeeAmount()));
     }
 }

@@ -1,6 +1,8 @@
 package com.maplinking.maplink;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maplinking.maplink.entity.Position;
+import com.maplinking.maplink.entity.RouteSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ final class MapLinkApiImpl implements MapLinkApi {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public MapLinkApiImpl(RestTemplateBuilder restTemplateBuilder, ObjectMapper objectMapper) {
+    MapLinkApiImpl(RestTemplateBuilder restTemplateBuilder, ObjectMapper objectMapper) {
         this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
     }
@@ -33,13 +35,14 @@ final class MapLinkApiImpl implements MapLinkApi {
 
     // TODO - Exception - Don't find address?
     @Override
-    public Address findAddress(String address, String number, String city, String state) {
+    public Position findPosition(String address, String number, String city, String state) {
         String url = String.format(GEOLOCATION_API_ADDRESS, address, number, city, state);
         System.out.println(url);
         try {
             GeolocationResponse geolocation = objectMapper.readValue(restTemplate.getForObject(url, String.class),
                     GeolocationResponse.class);
-            return geolocation.getAddresses().get(0);
+            Address geoAddress = geolocation.getAddresses().get(0);
+            return new Position(geoAddress.getLocation().getLatitude(), geoAddress.getLocation().getLongitude());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,21 +50,23 @@ final class MapLinkApiImpl implements MapLinkApi {
 
     // TODO - At least two waypoints
     @Override
-    public Route getRoute(List<Location> locationList) {
+    public RouteSummary getRouteSummary(List<Position> locationList) {
         String url = buildUrl(locationList);
         System.out.println(url);
         try {
-            return objectMapper.readValue(restTemplate.getForObject(url, String.class), RouteResponse.class)
+            Route route = objectMapper.readValue(restTemplate.getForObject(url, String.class), RouteResponse.class)
                     .getRoutes().get(0);
+            return new RouteSummary(route.getSummary().getDuration(), route.getSummary().getDistance(),
+                    route.getSummary().getTotalTollFees());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String buildUrl(List<Location> locationList) {
+    private String buildUrl(List<Position> locationList) {
         StringBuilder urlBuilder = new StringBuilder(ROUTES_API_ADDRESS);
         int i = 0;
-        for (Location loc : locationList)
+        for (Position loc : locationList)
             urlBuilder.append(String.format(WAYPOINT_PATTERN, i++, loc.getLatitude(), loc.getLongitude()));
         return urlBuilder.toString();
     }

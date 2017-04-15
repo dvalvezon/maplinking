@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Summary {
+class Summary {
 
     private Long duration;
     private Double distance;

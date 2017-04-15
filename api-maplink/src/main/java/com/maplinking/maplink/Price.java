@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Price {
+class Price {
 
     private List<PriceAtHourRange> pricesAtHourRange;
 

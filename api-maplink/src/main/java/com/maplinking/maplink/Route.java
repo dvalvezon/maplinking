@@ -1,6 +1,6 @@
 package com.maplinking.maplink;
 
-public class Route {
+class Route {
 
     private Summary summary;
 

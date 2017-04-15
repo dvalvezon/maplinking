@@ -2,7 +2,7 @@ package com.maplinking.maplink;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Location {
+class Location {
 
     @JsonProperty("lat")
     private String latitude;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GeolocationResponse {
+class GeolocationResponse {
 
     @JsonProperty("results")
     private List<Address> addresses;
