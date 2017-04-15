@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface MapLinkApi {
 
-    Position findPosition(String address, String number, String city, String state);
+    Position findPosition(String address, String number, String city, String state) throws MapLinkException;
 
 
-    RouteSummary getRouteSummary(List<Position> locationList);
+    RouteSummary getRouteSummary(List<Position> locationList) throws MapLinkException;
 }

@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface RouteService {
 
-    RouteInformation getRouteInformation(List<LocationInfo> locationInfos, BigDecimal costPerKm);
+    RouteInformation getRouteInformation(List<LocationInfo> locationInfos, BigDecimal costPerKm)
+            throws ServiceException;
 }

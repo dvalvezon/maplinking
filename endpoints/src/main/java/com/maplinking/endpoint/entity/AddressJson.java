@@ -1,8 +1,10 @@
-package com.maplinking.entity;
+package com.maplinking.endpoint.entity;
 
+import com.maplinking.endpoint.Validable;
+import com.maplinking.endpoint.ValidationException;
 import com.maplinking.service.entity.LocationInfo;
 
-public final class AddressJson {
+public final class AddressJson implements Validable {
 
     private String address;
     private String number;
@@ -43,7 +45,7 @@ public final class AddressJson {
 
     @Override
     public String toString() {
-        return "Location{" +
+        return "AddressJson{" +
                 "address='" + address + '\'' +
                 ", number='" + number + '\'' +
                 ", city='" + city + '\'' +
@@ -53,5 +55,14 @@ public final class AddressJson {
 
     public LocationInfo toLocationInfo() {
         return new LocationInfo(address, number, city, state);
+    }
+
+
+    @Override
+    public void validate() throws ValidationException {
+        isNullOrEmpty(address, "address must not be empty");
+        isNullOrEmpty(number, "number must not be empty");
+        isNullOrEmpty(city, "city must not be empty");
+        isNullOrEmpty(state, "state must not be empty");
     }
 }
